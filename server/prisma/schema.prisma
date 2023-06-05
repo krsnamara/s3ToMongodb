@@ -11,7 +11,7 @@ generator client {
 }
 
 model Posts {
-  id        String   @id @default(cuid()) @map("_id")
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   imageName String
   caption   String
   createdAt DateTime @default(now())

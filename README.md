@@ -4,8 +4,6 @@
 
 ---
 
-<br>
-
 Working on implementing the Prisma tutorial from <a href="https://www.youtube.com/watch?v=RebA5J-rlwg&ab_channel=WebDevSimplified">Web Dev Simplified</a> to initialize the Prisma ORM for this Multer S3 Bucket tutorial from <a href="https://www.youtube.com/watch?v=eQAIojcArRY&ab_channel=SamMeech-Ward">Sam Meech-Ward</a>.
 
 <br>
@@ -19,3 +17,4 @@ I found this <a href="https://www.prisma.io/docs/concepts/components/prisma-sche
 The end goal is to connect to a MongoDB database in order to create an events creation page for <a href="https://all-access-client.vercel.app/evnts/new">AccessiCity</a>.
 
 <a href=""></a>
+<a href="https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/querying-the-database-node-mongodb">Another resource</a>

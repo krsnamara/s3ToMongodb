@@ -1,51 +1,71 @@
-import express from 'express'
-import multer from 'multer'
-// import sharp from 'sharp'
-// import crypto from 'crypto'
+import express from "express";
+import multer from "multer";
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
+import {
+  S3Client,
+  PutObjectAclCommand,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
 
-import { S3Client } from '@aws-sdk/client-s3';
+import dotenv from "dotenv";
 
-import dotenv from 'dotenv';
+dotenv.config();
 
-dotenv.config()
+const bucketName = process.env.AWS_BUCKET_NAME;
+const bucketRegion = process.env.AWS_BUCKET_REGION;
+const accessKey = process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 
-const bucketName = process.env.AWS_BUCKET_NAME
-const bucketRegion = process.env.AWS_BUCKET_REGION
-const accessKey = process.env.AWS_ACCESS_KEY
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
-
-const s3 = new S3Client ({
+const s3 = new S3Client({
   credentials: {
-  accessKeyId: accessKey,
-  secretAccessKey: secretAccessKey,
+    accessKeyId: accessKey,
+    secretAccessKey: secretAccessKey,
   },
-  region: bucketRegion
-}); 
+  region: bucketRegion,
+});
 
-const app = express()
-const prisma = new PrismaClient()
+const app = express();
+const prisma = new PrismaClient();
 
-const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000"); // Replace with your frontend URL
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
 
 app.get("/api/posts", async (req, res) => {
-  const posts = await prisma.posts.findMany({orderBy: [{ created: 'desc'}]})
-  res.send(posts)
-})
+  const posts = await prisma.posts.findMany({ orderBy: [{ created: "desc" }] });
+  res.send(posts);
+});
 
+app.post("/api/posts", upload.single("image"), async (req, res) => {
+  console.log("req.body", req.body);
+  console.log("req.file", req.file);
 
-app.post('/api/posts', upload.single('image'), async (req, res) => {
-  console.log("req.body", req.body)
-  console.log("req.file", req.file)
-  req.file.buffer
-  res.send({})
-})
+  req.file.buffer;
+
+  const params = {
+    Bucket: bucketName,
+    Key: req.file.originalname,
+    Body: req.file.buffer,
+    ContentType: req.file.mimetype,
+  };
+
+  const command = new PutObjectCommand(params);
+
+  await s3.send(command);
+
+  res.send({});
+});
 
 app.delete("/api/posts/:id", async (req, res) => {
-  const id = +req.params.id
-  res.send({})
-})
+  const id = +req.params.id;
+  res.send({});
+});
 
-app.listen(8080, () => console.log("listening on port 8080"))
+app.listen(8080, () => console.log("listening on port 8080"));
