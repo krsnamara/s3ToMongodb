@@ -1,16 +1,16 @@
 import express from "express";
 import multer from "multer";
+import crypto from "crypto";
 
 import { PrismaClient } from "@prisma/client";
-import {
-  S3Client,
-  PutObjectAclCommand,
-  PutObjectCommand,
-} from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 import dotenv from "dotenv";
 
 dotenv.config();
+
+const randomImageName = (bytes = 32) =>
+  crypto.randomBytes(bytes).toString("hex");
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 const bucketRegion = process.env.AWS_BUCKET_REGION;
@@ -49,15 +49,15 @@ app.post("/api/posts", upload.single("image"), async (req, res) => {
 
   req.file.buffer;
 
+  const imageName = randomImageName();
   const params = {
     Bucket: bucketName,
-    Key: req.file.originalname,
+    Key: imageName,
     Body: req.file.buffer,
     ContentType: req.file.mimetype,
   };
 
   const command = new PutObjectCommand(params);
-
   await s3.send(command);
 
   res.send({});
