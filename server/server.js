@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import crypto from "crypto";
+import sharp from "sharp";
 
 import { PrismaClient } from "@prisma/client";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
@@ -47,18 +48,27 @@ app.post("/api/posts", upload.single("image"), async (req, res) => {
   console.log("req.body", req.body);
   console.log("req.file", req.file);
 
-  req.file.buffer;
+  const buffer = await sharp(req.file.buffer)
+    .resize({ height: 1920, width: 1080, fit: "contain" })
+    .toBuffer();
 
   const imageName = randomImageName();
   const params = {
     Bucket: bucketName,
     Key: imageName,
-    Body: req.file.buffer,
+    Body: buffer,
     ContentType: req.file.mimetype,
   };
 
   const command = new PutObjectCommand(params);
   await s3.send(command);
+
+  const post = await prisma.posts.create({
+    data: {
+      caption: req.body.caption,
+      image: imageName,
+    },
+  });
 
   res.send({});
 });
