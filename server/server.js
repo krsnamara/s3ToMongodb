@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/api/posts", async (req, res) => {
-  const posts = await prisma.posts.findMany({ orderBy: [{ created: "desc" }] });
+  const posts = await prisma.posts.findMany({ orderBy: { id: "desc" } });
   res.send(posts);
 });
 
@@ -66,7 +66,7 @@ app.post("/api/posts", upload.single("image"), async (req, res) => {
   const post = await prisma.posts.create({
     data: {
       caption: req.body.caption,
-      image: imageName,
+      imageName: imageName,
     },
   });
 
