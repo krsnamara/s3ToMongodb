@@ -4,7 +4,12 @@ import crypto from "crypto";
 import sharp from "sharp";
 
 import { PrismaClient } from "@prisma/client";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import dotenv from "dotenv";
 
@@ -41,6 +46,17 @@ app.use((req, res, next) => {
 
 app.get("/api/posts", async (req, res) => {
   const posts = await prisma.posts.findMany({ orderBy: { id: "desc" } });
+
+  for (const post of posts) {
+    const getObjectParams = {
+      Bucket: bucketName,
+      Key: post.imageName,
+    };
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command, { expiresIn: 60 });
+    post.imageUrl = url;
+  }
+
   res.send(posts);
 });
 
