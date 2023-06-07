@@ -12,7 +12,7 @@ export default function SinglePost({
 
   return (
     <div
-      className={className + " outline-1"}
+      className={`flex flex-col space-y-2 border-2 items-center border-gray-200 rounded-md p-5 ${className}`}
       style={{ width: 650 }}
     >
       <div className="flex flex-col space-y-2">
@@ -21,7 +21,7 @@ export default function SinglePost({
           <p className="text-lg  hover:underline">username</p>
         </div>
 
-        <p className="text-base">{caption}</p>
+        <p className="text-lg">{caption}</p>
 
         <div className="flex flex-row items-end space-x-4 justify-center">
           <img
