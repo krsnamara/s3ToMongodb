@@ -40,12 +40,12 @@ export default function NavBar({ onHome, onNewPost }) {
                   className="flex-shrink-0 flex items-center"
                 >
                   <img
-                    className="block lg:hidden h-8 w-auto"
+                    className="block h-8 w-auto"
                     src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
                     alt="Workflow"
                   />
 
-                  <h1 className="text-white">InstaSam</h1>
+                  <h1 className="text-white">InstaTan</h1>
                 </button>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
