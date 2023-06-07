@@ -70,7 +70,7 @@ app.post("/api/posts", upload.single("image"), async (req, res) => {
     },
   });
 
-  res.send({});
+  res.send(post);
 });
 
 app.delete("/api/posts/:id", async (req, res) => {
