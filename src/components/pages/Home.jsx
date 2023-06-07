@@ -28,9 +28,13 @@ function App() {
     console.log(`editPostClicked = (${id})`);
   };
   const deletePostClicked = async ({ id }) => {
-    console.log(`deletePostClicked = (${id})`);
-    await axios.delete("/api/posts/" + id);
-    setPosts(posts.filter((post) => post.id !== id));
+    try {
+      await axios.delete("http://localhost:8080/api/posts/" + id);
+      setPosts(posts.filter((post) => post.id !== id));
+      window.alert("Post has been successfully deleted");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const postActions = {
