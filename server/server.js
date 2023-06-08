@@ -7,10 +7,10 @@ import { PrismaClient } from "@prisma/client";
 import {
   S3Client,
   PutObjectCommand,
-  GetObjectCommand,
+  // GetObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { getSignedUrl } from "@aws-sdk/cloudfront-signer";
 
 import dotenv from "dotenv";
 
@@ -49,13 +49,13 @@ app.get("/api/posts", async (req, res) => {
   const posts = await prisma.posts.findMany({ orderBy: { id: "desc" } });
 
   for (const post of posts) {
-    const getObjectParams = {
-      Bucket: bucketName,
-      Key: post.imageName,
-    };
-    const command = new GetObjectCommand(getObjectParams);
-    const url = await getSignedUrl(s3, command, { expiresIn: 60 });
-    post.imageUrl = url;
+    post.imageUrl = getSignedUrl({
+      url: "https://d43rby6106out.cloudfront.net/" + post.imageName,
+      dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      privateKey: process.env.CLOUDFRONT_PRIVATE_KEY,
+      keyPairId: process.env.CLOUDFRONT_KEY_PAIR_ID,
+    });
+    console.log(process.env.CLOUDFRONT_KEY_PAIR_ID);
   }
 
   res.send(posts);

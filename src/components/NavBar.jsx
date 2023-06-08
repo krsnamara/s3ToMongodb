@@ -37,18 +37,18 @@ export default function NavBar({ onHome, onNewPost }) {
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <button
                   onClick={onHome}
-                  className="flex-shrink-0 flex items-center"
+                  className="flex items-center"
                 >
                   <img
-                    className="block h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                    className="block h-10 w-auto"
+                    src="https://freesvg.org/img/Logo-Logo-White-with-Black-Background.png"
                     alt="Workflow"
                   />
 
                   <h1 className="text-white">InstaTan</h1>
                 </button>
-                <div className="hidden sm:block sm:ml-6">
-                  <div className="flex space-x-4">
+                <div className="hidden sm:block sm:ml-6 items-center">
+                  <div className="flex justify-end space-x-4">
                     {navigation.map((item) => (
                       <button
                         key={item.name}
