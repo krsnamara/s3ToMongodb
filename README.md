@@ -52,6 +52,18 @@ To initialize the Prisma ORM for this Multer S3 Bucket tutorial from <a href="ht
 
 ---
 
+## CloudFront CDN and Signed URLS
+
+---
+
+To better serve the image files globally, the next step was to setup a
+<a href="https://www.youtube.com/watch?v=kbI7kRWAU-w&ab_channel=SamMeech-Ward">CloudFront CDN</a> with AWS. The AWS process had be updated regarding the security features. I had to work through some of the settings with the new methods.
+<br>
+<br>
+After setting up the CDN, to better secure the image URLs from scrappers and other crawler bots, <a href="https://www.youtube.com/watch?v=EIYrhbBk7do&ab_channel=SamMeech-Ward">this tutorial</a> teaches how to use the AWS CloudFront Signer package to attach the public key to the image file.
+
+---
+
 ## Next Steps
 
 ---
