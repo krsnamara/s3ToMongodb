@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import SinglePost from "../SinglePost";
-
-import { useNavigate } from "react-router-dom";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -48,10 +47,7 @@ function App() {
     <div className="App">
       <div className="flex flex-col space-y-100 items-center divide-y">
         {posts.map((post) => (
-          <div
-            key={`post-${post.id}`}
-            className="px-5 py-14"
-          >
+          <div key={`post-${post.id}`} className="px-5 py-14">
             <SinglePost
               className="relative"
               post={post}
