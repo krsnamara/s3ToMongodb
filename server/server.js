@@ -45,6 +45,8 @@ app.use((req, res, next) => {
   next();
 });
 
+// Get all posts
+
 app.get("/api/posts", async (req, res) => {
   const posts = await prisma.posts.findMany({ orderBy: { id: "desc" } });
 
@@ -61,9 +63,11 @@ app.get("/api/posts", async (req, res) => {
   res.send(posts);
 });
 
+// Post a new post
+
 app.post("/api/posts", upload.single("image"), async (req, res) => {
-  console.log("req.body", req.body);
-  console.log("req.file", req.file);
+  // console.log("req.body", req.body);
+  // console.log("req.file", req.file);
 
   const buffer = await sharp(req.file.buffer)
     .resize({ height: 1920, width: 1080, fit: "contain" })
@@ -89,6 +93,8 @@ app.post("/api/posts", upload.single("image"), async (req, res) => {
 
   res.send(post);
 });
+
+// delete a post
 
 app.delete("/api/posts/:id", async (req, res) => {
   const id = req.params.id.toString();

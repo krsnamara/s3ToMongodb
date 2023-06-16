@@ -61,6 +61,8 @@ To better serve the image files globally, the next step was to setup a
 <br>
 <br>
 After setting up the CDN, to better secure the image URLs from scrappers and other crawler bots, <a href="https://www.youtube.com/watch?v=EIYrhbBk7do&ab_channel=SamMeech-Ward">this tutorial</a> teaches how to use the AWS CloudFront Signer package to attach the public key to the image file.
+""
+<a href="https://tanarindev.medium.com/how-to-easily-store-and-display-user-images-in-react-68962e16fe49"> Another Option</a>
 
 ---
 
